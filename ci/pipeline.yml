@@ -92,6 +92,11 @@ jobs:
   - get: common-ci-repo      
   - get: version
   - get: order-release  
+  - task: prepare-app-manifest
+    file: order-repo/ci/tasks/app-manifest-prep.yml
+    params:
+      PCF_APP_SUFFIX: ((pcf-stage-app-suffix))
+      WORKSHOPNUM: ((workshopnum))   
   - put: dynatrace
     params:
       monspecserviceenvironment: OrderService/Staging
