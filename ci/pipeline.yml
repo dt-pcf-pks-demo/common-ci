@@ -38,7 +38,7 @@ resources:
   source:
     bucket: ((s3-bucket-name))
     region_name: us-east-2
-    regexp: ((workshopnum))/spring-music-(.*).jar
+    regexp: ((workshopnum))/microservice-kubernetes-demo-order-(.*).jar
     access_key_id: ((s3-access-key-id))
     secret_access_key: ((s3-secret-access-key))
 
@@ -106,7 +106,7 @@ jobs:
   - put: PCF-Stage
     params:
       manifest: app-manifest-output/manifest.yml
-      path: order-release/spring-music-*.jar
+      path: order-release/microservice-kubernetes-demo-order-*.jar
 
 - name: load-tests
   serial: true
