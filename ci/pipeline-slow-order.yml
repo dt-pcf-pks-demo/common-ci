@@ -1,0 +1,130 @@
+resource_types:
+- name: dynatrace-ufo-resource
+  type: docker-image
+  source:
+    repository: mvilliger/dynatrace-ufo-resource
+- name: dynatrace-resource
+  type: docker-image
+  source:
+    repository: mvilliger/dynatrace-resource
+
+resources:
+- name: order-repo
+  type: git
+  source:
+    uri: git@github.com:dt-pcf-pks-demo/order-service.git
+    branch: 2
+    private_key: ((github_private_key))
+
+- name: common-ci-repo
+  type: git
+  source:
+    uri: git@github.com:dt-pcf-pks-demo/common-ci.git
+    branch: master
+    private_key: ((github_private_key))
+
+- name: version
+  type: semver
+  source:
+    bucket: ((s3-bucket-name))
+    region_name: us-east-2
+    key: ((workshopnum))/current-version
+    access_key_id: ((s3-access-key-id))
+    secret_access_key: ((s3-secret-access-key))
+    initial_version: 1.0.1
+
+- name: order-release
+  type: s3
+  source:
+    bucket: ((s3-bucket-name))
+    region_name: us-east-2
+    regexp: ((workshopnum))/microservice-kubernetes-demo-order-(.*).jar
+    access_key_id: ((s3-access-key-id))
+    secret_access_key: ((s3-secret-access-key))
+
+- name: PCF-Stage
+  type: cf
+  source:
+    api: ((pcf-stage-api))
+    organization: ((pcf-stage-organization))
+    username: ((stage-deploy-username))
+    password: ((stage-deploy-password))
+    skip_cert_check: true
+    space: ((pcf-stage-space))
+    current_app_name: ((pcf-stage-app-suffix))
+
+- name: dynatrace
+  type: dynatrace-resource
+  source:
+    apitoken: ((apitoken))
+    tenanthost: ((tenanthost))
+
+jobs:
+- name: build-binary
+  serial: true
+  plan:
+  - get: order-repo
+    trigger: true
+  - get: common-ci-repo
+  - get: version
+    params: {bump: patch}
+  - task: build-artifact
+    file: common-ci-repo/ci/tasks/build-artifact.yml
+    timeout: 5m
+  - put: order-release
+    params:
+      file: workspace/microservice-kubernetes-demo-order-*.jar
+  - put: order-repo
+    params:
+      repository: order-repo
+      tag: version/number
+  - put: version
+    params: {file: version/number}
+
+- name: deploy-app
+  serial: true
+  public: true
+  plan:
+  - get: order-repo
+    #trigger: true
+    passed: 
+      - build-binary
+  - get: common-ci-repo      
+  - get: version
+  - get: order-release  
+  - task: prepare-app-manifest
+    file: common-ci-repo/ci/tasks/app-manifest-prep.yml
+    params:
+      PCF_APP_SUFFIX: ((pcf-stage-app-suffix))
+      WORKSHOPNUM: ((workshopnum))   
+  - put: dynatrace
+    params:
+      monspecserviceenvironment: OrderService/Staging
+      pipelinetaskname: ConcourseDeploy
+      VERSION_FILE: version/number
+      APP_REPO: order-repo
+  - put: PCF-Stage
+    params:
+      manifest: app-manifest-output/manifest.yml
+      path: order-release/microservice-kubernetes-demo-order-*.jar
+
+- name: load-tests
+  serial: true
+  public: true
+  plan:    
+  - get: order-repo
+    #trigger: true
+  - get: common-ci-repo    
+    passed:
+      - deploy-app
+  - task: run-load-tests
+    file: common-ci-repo/ci/tasks/load-tests.yml
+    params:
+      PCF_APP_SUFFIX: ((pcf-stage-app-suffix))
+      PCF_APP_DOMAIN: ((pcf-stage-app-domain))
+  # - task: push-dynatrace-monspec-data
+  #   file: common-ci-repo/ci/tasks/push-dynatrace-monspec-data.yml
+  #   params: 
+  #     monspecserviceenvironment: OrderService/Staging
+  #     apitoken: ((apitoken))
+  #     tenanthost: ((tenanthost))
