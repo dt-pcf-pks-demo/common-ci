@@ -19,7 +19,7 @@ resources:
 - name: common-ci-repo
   type: git
   source:
-    uri: git@github.com:dt-pcf-pks-demo/order-service.git
+    uri: git@github.com:dt-pcf-pks-demo/common-ci.git
     branch: master
     private_key: ((github_private_key))
 
