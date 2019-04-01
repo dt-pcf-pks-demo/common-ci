@@ -9,6 +9,7 @@ image_resource:
 
 inputs:
   - name: common-ci-repo
+  - name: order-repo
   - name: version
 outputs:
   - name: workspace
