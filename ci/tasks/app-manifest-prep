@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -xe
+echo $PCF_APP_SUFFIX
+echo $WORKSHOPNUM
+
+if [ -n "$PRODUCTION" ]; then
+cat ./current-app-info/current-app.txt
+sed "s/APPNAME/$(cat ./current-app-info/next-app.txt)-$PCF_APP_SUFFIX/" ./music-repo/manifests/manifest.yml > ./app-manifest-output/manifest-tmp.yml
+sed "s/APPCOLOR/$WORKSHOPNUM-$(cat ./current-app-info/next-app.txt)/" ./app-manifest-output/manifest-tmp.yml > ./app-manifest-output/manifest-tmp2.yml
+sed "s/DTGRP/$WORKSHOPNUM-Production/" ./app-manifest-output/manifest-tmp2.yml > ./app-manifest-output/manifest.yml
+else
+sed "s/APPNAME/$PCF_APP_SUFFIX/" ./music-repo/manifests/manifest.yml > ./app-manifest-output/manifest-tmp.yml
+sed "s/DTGRP/$WORKSHOPNUM-Stage/" ./app-manifest-output/manifest-tmp.yml > ./app-manifest-output/manifest-tmp2.yml
+sed "s/DEPLOYMENT_COLOR=SPRING-MUSIC-APPCOLOR//" ./app-manifest-output/manifest-tmp2.yml > ./app-manifest-output/manifest.yml
+fi
+
+cat ./app-manifest-output/manifest.yml

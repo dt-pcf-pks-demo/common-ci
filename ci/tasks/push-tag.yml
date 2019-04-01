@@ -1,0 +1,16 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: datianshi/gradle
+    tag: "latest"
+
+
+inputs:
+  - name: music-repo
+  - name: version
+
+run:
+  path: music-repo/ci/tasks/push-tag.sh

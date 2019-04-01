@@ -1,0 +1,17 @@
+config:
+  target: 'http://someserver.com'
+  phases:
+    - duration: 180
+      arrivalRate: 2
+  defaults:
+scenarios:
+  - flow:
+    - get:
+        url: "/"
+        headers: 
+          x-Dynatrace: 'NA=Test.Homepage;'
+    - get:
+        url: "/albums"
+        headers: 
+          x-Dynatrace: 'NA=Test.Albums;'
+  

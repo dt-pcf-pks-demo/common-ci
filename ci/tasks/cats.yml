@@ -1,0 +1,17 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: datianshi/cf-cli
+    tag: "latest"
+
+inputs:
+  - name: music-repo
+
+run:
+  path: music-repo/ci/tasks/cats.sh
+
+params:
+  MUSIC_URL:

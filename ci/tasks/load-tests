@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+#using container that already has alpine installed for speeeeeeeed!
+#echo "Installing artillery for load tests: https://artillery.io/docs/getting-started/"
+#npm install -g artillery
+
+
+# set LOAD_URL to the proper color in production, run directly against url in stage
+if [ -n "$PRODUCTION" ]; then
+export NEXT_APP_COLOR=$(cat ./current-app-info/next-app.txt)
+export LOAD_URL=http://$NEXT_APP_COLOR-$PCF_APP_SUFFIX.$PCF_APP_DOMAIN/
+else
+export LOAD_URL=http://$PCF_APP_SUFFIX.$PCF_APP_DOMAIN/
+fi
+
+echo "Running artillery load tests against $LOAD_URL..."
+
+#artillery quick --duration 10 --rate 10 $NEXT_APP_URL
+artillery run -t $LOAD_URL ./music-repo/ci/tasks/artillery-script.yml

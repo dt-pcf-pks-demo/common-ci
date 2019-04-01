@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+echo "configuring Dynatrace CLI with $apitoken and $tenanthost"
+
+python /dtcli/dtcli.py config apitoken $apitoken tenanthost $tenanthost
+
+echo "initializing Dynatrace Custom Device to store timeseries performance data"
+
+python /dtcli/dtcli.py monspec init ./music-repo/ci/smplmonspec.json ./music-repo/ci/smplpipelineinfo.json
