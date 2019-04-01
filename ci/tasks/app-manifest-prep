@@ -12,7 +12,7 @@ sed "s/DTGRP/$WORKSHOPNUM-Production/" ./app-manifest-output/manifest-tmp2.yml >
 else
 sed "s/APPNAME/$PCF_APP_SUFFIX/" ./music-repo/manifests/manifest.yml > ./app-manifest-output/manifest-tmp.yml
 sed "s/DTGRP/$WORKSHOPNUM-Stage/" ./app-manifest-output/manifest-tmp.yml > ./app-manifest-output/manifest-tmp2.yml
-sed "s/DEPLOYMENT_COLOR=SPRING-MUSIC-APPCOLOR//" ./app-manifest-output/manifest-tmp2.yml > ./app-manifest-output/manifest.yml
+sed "s/DEPLOYMENT_COLOR=ORDER-SERVICE-APPCOLOR//" ./app-manifest-output/manifest-tmp2.yml > ./app-manifest-output/manifest.yml
 fi
 
 cat ./app-manifest-output/manifest.yml

@@ -31,7 +31,7 @@ resources:
     key: ((workshopnum))/current-version
     access_key_id: ((s3-access-key-id))
     secret_access_key: ((s3-secret-access-key))
-    initial_version: 1.0.0
+    initial_version: 1.0.1
 
 - name: order-release
   type: s3
@@ -91,15 +91,10 @@ jobs:
       - build-binary
   - get: common-ci-repo      
   - get: version
-  - get: order-release
-  - task: prepare-app-manifest
-    file: common-ci-repo/ci/tasks/app-manifest-prep.yml
-    params:
-      PCF_APP_SUFFIX: ((pcf-stage-app-suffix))
-      WORKSHOPNUM: ((workshopnum))           
+  - get: order-release  
   - put: dynatrace
     params:
-      monspecserviceenvironment: SpringMusic/Staging
+      monspecserviceenvironment: OrderService/Staging
       pipelinetaskname: ConcourseDeploy
       VERSION_FILE: version/number
       APP_REPO: order-repo
@@ -122,9 +117,9 @@ jobs:
     params:
       PCF_APP_SUFFIX: ((pcf-stage-app-suffix))
       PCF_APP_DOMAIN: ((pcf-stage-app-domain))
-  - task: push-dynatrace-monspec-data
-    file: common-ci-repo/ci/tasks/push-dynatrace-monspec-data.yml
-    params: 
-      monspecserviceenvironment: SpringMusic/Staging
-      apitoken: ((apitoken))
-      tenanthost: ((tenanthost))
+  # - task: push-dynatrace-monspec-data
+  #   file: common-ci-repo/ci/tasks/push-dynatrace-monspec-data.yml
+  #   params: 
+  #     monspecserviceenvironment: OrderService/Staging
+  #     apitoken: ((apitoken))
+  #     tenanthost: ((tenanthost))
