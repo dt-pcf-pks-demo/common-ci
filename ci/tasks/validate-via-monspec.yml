@@ -8,9 +8,10 @@ image_resource:
     tag: "latest"
 
 inputs:
+- name: order-repo
 - name: common-ci-repo
 - name: current-app-info
   optional: true
 
 run:
-  path: ./music-repo/ci/tasks/validate-via-monspec
+  path: ./common-ci-repo/ci/tasks/validate-via-monspec

@@ -8,10 +8,11 @@ image_resource:
     tag: "latest"
 
 inputs:
-- name: music-repo
+- name: order-repo
+- name: common-ci-repo
 
 outputs:
 - name: current-app-info
 
 run:
-  path: ./music-repo/ci/tasks/current-app-get-info
+  path: ./common-ci-repo/ci/tasks/current-app-get-info

@@ -8,10 +8,11 @@ image_resource:
     tag: "latest"
 
 inputs:
-  - name: common-ci-repo  
+- name: order-repo
+- name: common-ci-repo
 
 run:
-  path: music-repo/ci/tasks/cats.sh
+  path: common-ci-repo/ci/tasks/cats.sh
 
 params:
   MUSIC_URL:

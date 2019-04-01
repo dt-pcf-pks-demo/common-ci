@@ -8,6 +8,7 @@ image_resource:
     tag: "latest"
 
 inputs:
+- name: order-repo
 - name: common-ci-repo
 - name: current-app-info
   optional: true
@@ -16,4 +17,4 @@ outputs:
 - name: app-manifest-output
 
 run:
-  path: ./music-repo/ci/tasks/app-manifest-prep
+  path: ./common-ci-repo/ci/tasks/app-manifest-prep

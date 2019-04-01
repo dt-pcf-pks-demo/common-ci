@@ -8,9 +8,10 @@ image_resource:
     tag: "8-jdk-alpine"
 
 inputs:
+- name: order-repo
 - name: common-ci-repo
 caches:
   - path: gradle
 
 run:
-  path: music-repo/ci/tasks/unit.sh
+  path: ./common-ci-repo/ci/tasks/unit.sh
