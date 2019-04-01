@@ -9,7 +9,7 @@ image_resource:
 
 
 inputs:
-  - name: music-repo
+  - name: common-ci-repo
   - name: version
 
 run:

@@ -8,7 +8,7 @@ image_resource:
     tag: "latest"
 
 inputs:
-- name: music-repo
+- name: common-ci-repo
 - name: current-app-info
   optional: true
 params:

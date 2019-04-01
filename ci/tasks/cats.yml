@@ -8,7 +8,7 @@ image_resource:
     tag: "latest"
 
 inputs:
-  - name: music-repo
+  - name: common-ci-repo  
 
 run:
   path: music-repo/ci/tasks/cats.sh
