@@ -86,7 +86,7 @@ jobs:
   public: true
   plan:
   - get: order-repo
-    #trigger: true
+    trigger: true
     passed: 
       - build-binary
   - get: common-ci-repo      
