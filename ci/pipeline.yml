@@ -113,7 +113,7 @@ jobs:
   public: true
   plan:    
   - get: order-repo
-    #trigger: true
+    trigger: true
   - get: common-ci-repo    
     passed:
       - deploy-app
