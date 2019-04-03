@@ -18,4 +18,4 @@ fi
 echo "Running artillery load tests against $LOAD_URL..."
 
 #artillery quick --duration 10 --rate 10 $NEXT_APP_URL
-artillery run -t $LOAD_URL ./music-repo/ci/tasks/artillery-script.yml
+artillery run -t $LOAD_URL ./common-ci-repo/ci/tasks/artillery-script.yml

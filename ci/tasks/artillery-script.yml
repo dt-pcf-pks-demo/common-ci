@@ -9,9 +9,6 @@ scenarios:
     - get:
         url: "/"
         headers: 
-          x-Dynatrace: 'NA=Test.Homepage;'
-    - get:
-        url: "/albums"
-        headers: 
-          x-Dynatrace: 'NA=Test.Albums;'
+          x-Dynatrace: 'NA=Test.ListOrders;'
+
   
